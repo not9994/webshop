@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ST Lockers Webshop</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --text: #111;
+      --accent: #007b5e;
+    }
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #eee;
+      --accent: #00d9a6;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: 0.3s;
+    }
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      padding: 1rem;
+      background: #f0f0f0;
+    }
+    .toolbar input, .toolbar select, .toolbar button {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .product {
+      background: var(--bg);
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .product:hover {
+      transform: scale(1.02);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .product h2 {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+    .product p {
+      margin: 0.2rem 0;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #ddd;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ST Lockers – Kreativ Webshop</h1>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Søg efter produkt...">
+  <select id="sort">
+    <option value="">Sortér</option>
+    <option value="price-asc">Pris stigende</option>
+    <option value="price-desc">Pris faldende</option>
+    <option value="name">Navn A-Å</option>
+  </select>
+  <select id="filter">
+    <option value="">Alle kategorier</option>
+    <option value="T-shirt">T-shirt</option>
+    <option value="Bukser">Bukser</option>
+    <option value="Accessories">Accessories</option>
+  </select>
+  <button onclick="toggleTheme()">Skift Tema</button>
+</div>
+
+<main class="container" id="product-list">
+  <!-- Produkter indsættes her via JavaScript -->
+</main>
+
+<footer>
+  &copy; 2025 ST Lockers – Alle rettigheder forbeholdes
+</footer>
+
+<script>
+  const products = [
+    { name: "Basic T-shirt", category: "T-shirt", price: 149, image: "https://via.placeholder.com/300x200?text=T-shirt" },
+    { name: "Grå Sweatpants", category: "Bukser", price: 229, image: "https://via.placeholder.com/300x200?text=Sweatpants" },
+    { name: "Sort Cap", category: "Accessories", price: 99, image: "https://via.placeholder.com/300x200?text=Cap" },
+    { name: "Hættetrøje", category: "T-shirt", price: 349, image: "https://via.placeholder.com/300x200?text=Hættetrøje" },
+    { name: "Jeans", category: "Bukser", price: 299, image: "https://via.placeholder.com/300x200?text=Jeans" },
+    { name: "Solbriller", category: "Accessories", price: 149, image: "https://via.placeholder.com/300x200?text=Solbriller" }
+  ];
+
+  function renderProducts() {
+    const list = document.getElementById("product-list");
+    list.innerHTML = "";
+    let search = document.getElementById("search").value.toLowerCase();
+    let sort = document.getElementById("sort").value;
+    let filter = document.getElementById("filter").value;
+
+    let result = products.filter(p => p.name.toLowerCase().includes(search));
+    if (filter) result = result.filter(p => p.category === filter);
+    if (sort === "price-asc") result.sort((a, b) => a.price - b.price);
+    if (sort === "price-desc") result.sort((a, b) => b.price - a.price);
+    if (sort === "name") result.sort((a, b) => a.name.localeCompare(b.name));
+
+    for (let p of result) {
+      list.innerHTML += `
+        <div class="product">
+          <img src="${p.image}" alt="${p.name}">
+          <h2>${p.name}</h2>
+          <p>Kategori: ${p.category}</p>
+          <p>Pris: DKK ${p.price}</p>
+          <button>Køb</button>
+        </div>
+      `;
+    }
+  }
+
+  document.getElementById("search").addEventListener("input", renderProducts);
+  document.getElementById("sort").addEventListener("change", renderProducts);
+  document.getElementById("filter").addEventListener("change", renderProducts);
+
+  function toggleTheme() {
+    const current = document.body.getAttribute("data-theme");
+    document.body.setAttribute("data-theme", current === "dark" ? "" : "dark");
+  }
+
+  renderProducts();
+</script>
+
+</body>
+</html>
